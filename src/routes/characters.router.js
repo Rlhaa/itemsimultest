@@ -1,15 +1,16 @@
 import express from "express";
 import { prisma } from "../utils/prisma/index.js";
 import dotenv from "dotenv";
+import authM from "../middlewares/auth.js";
 
+dotenv.config();
 // character.js
-const express = require("express");
 const router = express.Router();
 
-router.post("/create-character", async (req, res) => {
+router.post("/create-character", authM, async (req, res) => {
   const { nickname } = req.body;
-
-  // 캐릭터 이름 중복 체크
+  const accounts = req.accounts;
+  const { account_id } = accounts;
   const isExistCharacter = await prisma.characters.findFirst({
     where: { nickname },
   });
@@ -21,10 +22,11 @@ router.post("/create-character", async (req, res) => {
   // 캐릭터 생성 로직
   const newCharacter = await prisma.characters.create({
     data: {
+      account_id,
       nickname,
-      health: parseInt(process.env.DEFAULT_HEALTH, 10),
-      power: parseInt(process.env.DEFAULT_POWER, 10),
-      money: parseInt(process.env.DEFAULT_MONEY, 10),
+      health: 10,
+      power: 10,
+      money: 10,
     },
   });
   return res

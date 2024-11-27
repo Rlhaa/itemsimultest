@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
 import { prisma } from "../utils/prisma/index.js";
 
-export default async function (req, res, next) {
+export default async function authM(req, res, next) {
   try {
     const { authorization } = req.headers;
+    console.log(authorization);
     if (!authorization) throw new Error("토큰이 존재하지 않습니다.");
 
     const [tokenType, token] = authorization.split(" ");
@@ -23,7 +24,7 @@ export default async function (req, res, next) {
 
     // req.accounts 사용자 정보를 저장합니다.
     req.accounts = accounts;
-
+    console.log(req.accounts);
     next();
   } catch (error) {
     // 토큰이 만료되었거나, 조작되었을 때, 에러 메시지를 다르게 출력합니다.
