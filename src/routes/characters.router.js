@@ -8,9 +8,11 @@ dotenv.config();
 const router = express.Router();
 
 router.post("/create-character", authM, async (req, res) => {
+  // 요청 본문에서 nickname 추출
   const { nickname } = req.body;
-  const accounts = req.accounts;
-  const { account_id } = accounts;
+  // authM 미들웨어에서 인증을 거친 accounts 정보를 가져오고
+  // accounts에서 account_id 를추출한다
+  const { account_id } = req.abc;
   const isExistCharacter = await prisma.characters.findFirst({
     where: { nickname },
   });
@@ -22,11 +24,11 @@ router.post("/create-character", authM, async (req, res) => {
   // 캐릭터 생성 로직
   const newCharacter = await prisma.characters.create({
     data: {
-      account_id,
-      nickname,
-      health: 10,
-      power: 10,
-      money: 10,
+      account_id: account_id,
+      nickname: nickname,
+      health: 500,
+      power: 100,
+      money: 10000,
     },
   });
   return res
