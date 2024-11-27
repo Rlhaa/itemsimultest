@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Item {
+  item_id    Int             @id @default(autoincrement()) @map("item_id") // 아이템 고유 ID (Primary Key)
+  name       String          @map("name") // 아이템 이름
+  type       String          @map("type") // 아이템 종류 (예: 무기, 방어구)
+  attributes Json            @map("attributes") // 아이템 속성
+  created_at DateTime        @default(now()) @map("created_at") // 생성일시
+
+  // Item, Character_Inventory >> 1:N 관계
+  c_inven  Character_Inventory[] @relation("ItemToCha_Inven")
+
+  // Item, Character_Items >> 1:N 관계
+  c_items  Character_Items[] @relation("ItemToCha_Items")
+
+  @@map("Item")
+}
+
+model Accounts {
+  account_id Int           @id @default(autoincrement()) @map("account_id")  // 계정 고유 ID (Primary Key)
+  email      String        @unique @map("email") // 이메일 (고유)
+  id         String        @unique @map("id") // 아이디 (고유)
+  password   String        @map("password") //비밀번호
+  name       String        @map("name") // 이름
+  age        Int           @map("age") // 나이
+  gender     String        @map("gender") // 성별
+  created_at DateTime      @default(now()) @map("created_at") // 생성일시
+
+  // Accounts, Characters >> 1:N 관계
+  character  Characters[]  @relation("AccToCha")
+
+  @@map("Accounts")
+}
+
+
+model Characters {
+  character_id Int                @id @default(autoincrement()) @map("character_id")  // 캐릭터 고유 ID (Primary Key)
+  account_id   Int                @map("account_id") // Accounts 참조 외래키
+  nickname     String             @unique @map("nickname") // 닉네임
+  level        Int                @map("level") // 레벨
+  created_at   DateTime           @default(now()) @map("created_at") // 생성일자
+
+  // Characters, Character_Inventory >> 1:N 관계
+  c_inven  Character_Inventory[]  @relation("ChaToCha_Inven")
+
+  // Characters, Character_Items >> 1:N 관계
+  c_items  Character_Items[]      @relation("ChaToCha_Items")
+
+  // AccToCha 관계 설정
+  account  Accounts               @relation("AccToCha", fields: [account_id], references: [account_id], onDelete: Cascade)
+
+  @@map("Characters")
+}
+
+model Character_Inventory {
+  inventory_id Int      @id @default(autoincrement()) @map("inventory_id")  // 인벤토리 고유 ID (Primary Key)
+  character_id Int      @map("character_id") // Characters 참조 외래키
+  item_id      Int      @map("item_id") // Item 참조 외래키
+  quantity     Int      @map("quantity") // 인벤토리 내 아이템 수량
+
+  // ChaToCha_Inven 관계 설정
+  character  Characters @relation("ChaToCha_Inven", fields: [character_id], references: [character_id], onDelete: Cascade)
+
+  // ItemToCha_Inven 관계 설정
+  item  Item            @relation("ItemToCha_Inven", fields: [item_id], references: [item_id], onDelete: Cascade)
+
+  @@map("Character_Inventory")
+}
+
+
+model Character_Items {
+  character_item_id Int     @id @default(autoincrement()) @map("character_item_id")  // 캐릭터 아이템  고유 ID (Primary Key)
+  character_id      Int     @map("character_id") // Characters 참조 외래키
+  item_id           Int     @map("item_id") // Item 참조 외래키
+  equipped          Boolean @default(false) @map("equipped") // 착용 여부
+
+  // ChaToCha_Items 관계 설정
+  character  Characters     @relation("ChaToCha_Items", fields: [character_id], references: [character_id], onDelete: Cascade)
+
+  // ItemToCha_Items 관계 설정
+  item       Item           @relation("ItemToCha_Items", fields: [item_id], references: [item_id], onDelete: Cascade) 
+
+  @@map("Character_Items")
+}
