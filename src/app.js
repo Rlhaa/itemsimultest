@@ -1,6 +1,6 @@
 import express from "express";
 import cookieParser from "cookie-parser";
-import accountRouter from "./routes/accounts.router.js";
+import accountRouter from "./routes/signup.router.js";
 import dotenv from "dotenv";
 dotenv.config();
 console.log(process.env.DATABASE_URL);
