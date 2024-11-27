@@ -1,12 +1,13 @@
 import express from "express";
 import { prisma } from "../utils/prisma/index.js";
+import dotenv from "dotenv";
 
 // character.js
 const express = require("express");
 const router = express.Router();
 
 router.post("/create-character", async (req, res) => {
-  const { nickname, level } = req.body;
+  const { nickname } = req.body;
 
   // 캐릭터 이름 중복 체크
   const isExistCharacter = await prisma.characters.findFirst({
@@ -21,7 +22,9 @@ router.post("/create-character", async (req, res) => {
   const newCharacter = await prisma.characters.create({
     data: {
       nickname,
-      level,
+      health: parseInt(process.env.DEFAULT_HEALTH, 10),
+      power: parseInt(process.env.DEFAULT_POWER, 10),
+      money: parseInt(process.env.DEFAULT_MONEY, 10),
     },
   });
   return res
