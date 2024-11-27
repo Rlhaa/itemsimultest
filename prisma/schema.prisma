@@ -50,7 +50,9 @@ model Characters {
   character_id Int                @id @default(autoincrement()) @map("character_id")  // 캐릭터 고유 ID (Primary Key)
   account_id   Int                @map("account_id") // Accounts 참조 외래키
   nickname     String             @unique @map("nickname") // 닉네임
-  level        Int                @map("level") // 레벨
+  health       Int                @map("health") // 체력
+  power        Int                @map("power") // 공격력
+  money        Int                @map("money") // 레벨
   created_at   DateTime           @default(now()) @map("created_at") // 생성일자
 
   // Characters, Character_Inventory >> 1:N 관계
