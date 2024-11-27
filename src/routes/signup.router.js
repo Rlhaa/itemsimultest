@@ -26,15 +26,20 @@ router.post("/sign-up", async (req, res) => {
     return res.status(409).json({ message: "이미 존재하는 id입니다." });
   }
 
-  const idForm = /^[a-z0-9]+$/;
+  // (?=.*[a-z]) : 최소한 1개 이상의 소문자가 포함되어야 합니다.
+  // (?=.*\d) : 최소한 1개 이상의 숫자가 포함되어야 합니다.
+  // [a-z0-9]+ : 소문자와 숫자로만 이루어져야 합니다.
+  // ^와 $ : 문자열의 시작과 끝을 의미합니다.
+  const idForm = /^(?=.*[a-z])(?=.*\d)[a-z0-9]+$/;
+  //const idForm = /^[a-z0-9]+$/;
   if (!idForm.test(id)) {
     return res
       .status(409)
       .json({ message: "id는 영어(소문자)와 숫자로만 설정해야 합니다" });
   }
 
-  const passwrodForm = /^.{1,6}$/;
-  if (!passwrodForm.test(password)) {
+  const passwordForm = /^.{1,6}$/;
+  if (!passwordForm.test(password)) {
     return res
       .status(409)
       .json({ message: "password는 6자리 이하로만 설정할 수 있습니다" });
