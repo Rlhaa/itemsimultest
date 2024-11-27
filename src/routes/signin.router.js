@@ -25,6 +25,7 @@ router.post("/sign-in", async (req, res) => {
     "server-secret-key",
     { expiresIn: "1h" }
   );
+
   return res.status(200).json({ message: "로그인 성공", token });
 });
 export default router;
