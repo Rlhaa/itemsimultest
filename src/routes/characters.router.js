@@ -14,7 +14,7 @@ router.post("/create-character", authM, async (req, res) => {
   // accounts에서 account_id를 추출한다
   const { account_id } = req.abc;
 
-  // 낙내암 중복 검증
+  // 닉네임 중복 검증
   const isExistCharacter = await prisma.characters.findFirst({
     where: { nickname },
   });
