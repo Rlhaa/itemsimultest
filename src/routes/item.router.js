@@ -4,12 +4,8 @@ import { prisma } from "../utils/prisma/index.js";
 const router = express.Router();
 
 router.post("/create-item", async (req, res) => {
-  // 요청 본문에서 nickname 추출
   const { item_code, item_name, item_stat, item_price } = req.body;
-  // authM 미들웨어에서 인증을 거친 accounts 정보를 가져오고
-  // accounts에서 account_id를 추출한다
 
-  // 닉네임 중복 검증
   const isExistCode = await prisma.item.findFirst({
     where: { item_code },
   });
