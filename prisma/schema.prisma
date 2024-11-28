@@ -15,10 +15,11 @@ datasource db {
 
 model Item {
 
-  item_code  Int             @id @default(autoincrement()) @map("item_code") // 아이템 고유 ID (Primary Key)
+  item_id  Int               @id @default(autoincrement()) @map("item_id") // 아이템 고유 ID (Primary Key)
+  item_code  Int             @map("item_code") // 아이템 코드
   item_name  String          @map("item_name") // 아이템 이름
-  item_stat  String          @map("item_stat") // 아이템 스탯 (예: 무기, 방어구)
-  item_price Json            @map("item_price") // 아이템 가격
+  item_stat  Json            @map("item_stat") // 아이템 스탯 (예: 무기, 방어구)
+  item_price Int            @map("item_price") // 아이템 가격
 
 
   // Item, Character_Inventory >> 1:N 관계
@@ -71,14 +72,14 @@ model Characters {
 model Character_Inventory {
   inventory_id Int      @id @default(autoincrement()) @map("inventory_id")  // 인벤토리 고유 ID (Primary Key)
   character_id Int      @map("character_id") // Characters 참조 외래키
-  item_code      Int      @map("item_code") // Item 참조 외래키
+  item_id      Int      @map("item_id") // Item 참조 외래키
   quantity     Int      @map("quantity") // 인벤토리 내 아이템 수량
 
   // ChaToCha_Inven 관계 설정
   character  Characters @relation("ChaToCha_Inven", fields: [character_id], references: [character_id], onDelete: Cascade)
 
   // ItemToCha_Inven 관계 설정
-  item  Item            @relation("ItemToCha_Inven", fields: [item_code], references: [item_code], onDelete: Cascade)
+  item  Item            @relation("ItemToCha_Inven", fields: [item_id], references: [item_id], onDelete: Cascade)
 
   @@map("Character_Inventory")
 }
@@ -87,14 +88,14 @@ model Character_Inventory {
 model Character_Items {
   character_item_id Int     @id @default(autoincrement()) @map("character_item_id")  // 캐릭터 아이템  고유 ID (Primary Key)
   character_id      Int     @map("character_id") // Characters 참조 외래키
-  item_code           Int     @map("item_code") // Item 참조 외래키
+  item_id           Int     @map("item_id") // Item 참조 외래키
   equipped          Boolean @default(false) @map("equipped") // 착용 여부
 
   // ChaToCha_Items 관계 설정
   character  Characters     @relation("ChaToCha_Items", fields: [character_id], references: [character_id], onDelete: Cascade)
 
   // ItemToCha_Items 관계 설정
-  item       Item           @relation("ItemToCha_Items", fields: [item_code], references: [item_code], onDelete: Cascade) 
+  item       Item           @relation("ItemToCha_Items", fields: [item_id], references: [item_id], onDelete: Cascade) 
 
   @@map("Character_Items")
 }
