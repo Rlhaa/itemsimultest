@@ -12,7 +12,7 @@ router.get("/search", async (req, res, next) => {
       created_at: true,
     },
     orderBy: {
-      created_at: "desc", // 게시글을 최신순으로 정렬합니다.
+      created_at: "desc",
     },
   });
 
