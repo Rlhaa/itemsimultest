@@ -14,11 +14,13 @@ datasource db {
 }
 
 model Item {
-  item_id    Int             @id @default(autoincrement()) @map("item_id") // 아이템 고유 ID (Primary Key)
-  name       String          @map("name") // 아이템 이름
-  type       String          @map("type") // 아이템 종류 (예: 무기, 방어구)
-  attributes Json            @map("attributes") // 아이템 속성
-  created_at DateTime        @default(now()) @map("created_at") // 생성일시
+
+  item_id  Int               @id @default(autoincrement()) @map("item_id") // 아이템 고유 ID (Primary Key)
+  item_code  Int             @unique @map("item_code") // 아이템 코드
+  item_name  String          @map("item_name") // 아이템 이름
+  item_stat  Json            @map("item_stat") // 아이템 스탯 (예: 무기, 방어구)
+  item_price Int            @map("item_price") // 아이템 가격
+
 
   // Item, Character_Inventory >> 1:N 관계
   c_inven  Character_Inventory[] @relation("ItemToCha_Inven")

@@ -23,8 +23,8 @@ export default async function authM(req, res, next) {
     }
 
     // req.accounts 사용자 정보를 저장합니다.
-    req.accounts = accounts;
-    console.log(req.accounts);
+    req.abc = accounts;
+    console.log("인증된 정보 :", req.abc);
     next();
   } catch (error) {
     // 토큰이 만료되었거나, 조작되었을 때, 에러 메시지를 다르게 출력합니다.
