@@ -14,9 +14,6 @@ console.log(process.env.DATABASE_URL);
 const app = express();
 const PORT = 3000;
 
-// const ACCESS_TOKEN_SECRET_KEY = `HangHae99`; // Access Token의 비밀 키를 정의합니다.
-// const REFRESH_TOKEN_SECRET_KEY = `Sparta`; // Refresh Token의 비밀 키를 정의합니다.
-
 app.use(express.json());
 app.use(cookieParser());
 

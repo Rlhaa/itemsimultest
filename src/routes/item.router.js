@@ -18,10 +18,8 @@ router.post("/create-item", async (req, res) => {
     return res.status(409).json({ message: "이미 존재하는 아이템입니다." });
   }
 
-  // 캐릭터 생성 로직
   const newItem = await prisma.item.create({
     data: {
-      // 뽑아온 nickname, account_id를 각 컬럼에 적용한다.
       item_code: item_code,
       item_name: item_name,
       item_stat: item_stat,
@@ -64,6 +62,9 @@ router.get("/list_search", async (req, res, next) => {
       item_code: true,
       item_name: true,
       item_price: true,
+    },
+    orderBy: {
+      item_code: "desc", // 아이템 코드를 내림차순으로 정렬
     },
   });
 
