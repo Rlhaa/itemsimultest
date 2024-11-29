@@ -12,7 +12,7 @@ dotenv.config();
 console.log(process.env.DATABASE_URL);
 
 const app = express();
-const PORT = 3000;
+const PORT = 5000;
 
 app.use(express.json());
 app.use(cookieParser());
